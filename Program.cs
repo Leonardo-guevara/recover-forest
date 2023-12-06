@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using recover_forest;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //TODO:conecio a la base de datos 
 var connecionsting = builder.Configuration.GetConnectionString("defaulConection");
-builder.Services.AddDbContext<AplicationDbContext>(opciones => opciones.UseSqlServer(connecionsting));
+builder.Services.AddDbContext<AplicationDbContext>(
+    opciones => opciones.UseSqlServer(connecionsting,
+               topology =>topology.UseNetTopologySuite()
+    ));
+
+//crear conexion base de datos pg
+//var Conexion_base = builder.Configuration.GetConnectionString("PostgreSQLConnection");
+//builder.Services.AddDbContext<AplicationDbContext>(opciones => opciones.UseNpgsql(Conexion_base) );
+
+
 
 var app = builder.Build();
 
